@@ -1,6 +1,7 @@
 export const SUCCESS_MESSAGES = {
   USER_CREATED: "Signup successful",
   LOGIN_SUCCESSFUL: "Login successful",
+  LOGOUT_SUCCESSFUL: "Logout successfullY",
   LEAD_CREATED: "Lead created successfully",
   LEAD_UPDATED: "Lead updated successfully",
   LEAD_DELETED: "Lead deleted successfully",
