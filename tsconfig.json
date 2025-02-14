@@ -8,7 +8,8 @@
     "outDir": "./dist", // Output directory for transpiled files
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "types": ["node", "jest"]
   },
   "include": ["src/**/*", "src/types/global.d.ts"], // Include all TypeScript files in src
   "exclude": ["node_modules"] // Exclude node_modules folder

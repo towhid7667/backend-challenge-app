@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { SUCCESS_MESSAGES, ERROR_MESSAGES } from "../constants/messages";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
-
+import redisClient from "../../redis/redis-config";
 export const signup = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
@@ -55,4 +55,25 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const logout = async (req: Request, res: Response): Promise<void> => {};
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader?.split(" ")[1];
+
+    if (!token) {
+      res.status(401).json({ error: ERROR_MESSAGES.UNAUTHORIZED });
+      return;
+    }
+
+    // Blacklist only this specific token
+    await redisClient.set(`blacklisted_${token}`, "true");
+
+    // Clear the refreshToken cookie
+    res.clearCookie("refreshToken");
+
+    // The test expects 204 status code
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+  }
+};
